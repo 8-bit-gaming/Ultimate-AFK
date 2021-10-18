@@ -71,7 +71,7 @@ namespace UltimateAFK
                 Handlers.Scp914.Activating += PlayerEvents.On914Activate;
                 Handlers.Scp914.ChangingKnobSetting += PlayerEvents.On914Change;
                 Handlers.Player.InteractingLocker += PlayerEvents.OnLockerInteract;
-                Handlers.Player.ItemDropped += PlayerEvents.OnDropItem;
+                Handlers.Player.DroppingItem += PlayerEvents.OnDropItem;
                 Handlers.Scp079.GainingExperience += PlayerEvents.OnSCP079Exp;
 
                 Log.Info($"UltimateAFK plugin loaded.\n Written by Thomasjosif for King's Playground");
@@ -92,7 +92,7 @@ namespace UltimateAFK
             Handlers.Scp914.Activating -= PlayerEvents.On914Activate;
             Handlers.Scp914.ChangingKnobSetting -= PlayerEvents.On914Change;
             Handlers.Player.InteractingLocker -= PlayerEvents.OnLockerInteract;
-            Handlers.Player.ItemDropped -= PlayerEvents.OnDropItem;
+            Handlers.Player.DroppingItem -= PlayerEvents.OnDropItem;
             Handlers.Scp079.GainingExperience -= PlayerEvents.OnSCP079Exp;
 
             PlayerEvents = null;

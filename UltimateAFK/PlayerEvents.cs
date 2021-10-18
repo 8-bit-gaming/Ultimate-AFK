@@ -110,7 +110,7 @@ namespace UltimateAFK
 				Log.Error($"ERROR In OnLockerInteract(): {e}");
 			}
 		}
-		public void OnDropItem(ItemDroppedEventArgs ev)
+		public void OnDropItem(DroppingItemEventArgs ev)
 		{
 			try
 			{

@@ -5,7 +5,6 @@ using MEC;
 using Exiled.API.Features;
 using Exiled.Loader;
 using PlayableScps;
-using scp035.API;
 using System.Reflection;
 using Exiled.API.Enums;
 
@@ -28,9 +27,6 @@ namespace UltimateAFK
 
         // Do not change this delay. It will screw up the detection
         public float delay = 1.0f;
-
-        private Player TryGet035() => Scp035Data.GetScp035();
-        private void TrySpawn035(Player player) => Scp035Data.Spawn035(player);
 
         // Expose replacing player for plugin support
         public Player PlayerToReplace;
@@ -126,7 +122,8 @@ namespace UltimateAFK
                 bool is035 = false;
                 try
                 {
-                    is035 = this.ply.Id == TryGet035()?.Id;
+                    
+                    is035 = Scp035.API.IsScp035(this.ply);
                 }
                 catch (Exception e)
                 {
@@ -135,16 +132,16 @@ namespace UltimateAFK
 
                 // Credit: DCReplace :)
                 // I mean at this point 90% of this has been rewritten lol...
-                var inventory = this.ply.Inventory.items.Select(x => x.id).ToList();
+                var inventory = this.ply.Inventory.UserInventory.Items.Select(x => x.Value.ItemTypeId).ToList();
 
                 RoleType role = this.ply.Role;
                 Vector3 pos = this.ply.Position;
                 float health = this.ply.Health;
 
                 // New strange ammo system because the old one was fucked.
-                uint ammo1 = this.ply.Ammo[(int)AmmoType.Nato556];
-                uint ammo2 = this.ply.Ammo[(int)AmmoType.Nato762];
-                uint ammo3 = this.ply.Ammo[(int)AmmoType.Nato9];
+                ushort ammo1 = this.ply.Ammo[ItemType.Ammo556x45];
+                ushort ammo2 = this.ply.Ammo[ItemType.Ammo762x39];
+                ushort ammo3 = this.ply.Ammo[ItemType.Ammo9x19];
 
                 // Stuff for 079
                 byte Level079 = 0;
@@ -160,7 +157,7 @@ namespace UltimateAFK
                 if (PlayerToReplace != null)
                 {
                     // Make the player a spectator first so other plugins can do things on player changing role with uAFK.
-                    this.ply.Inventory.Clear(); // Clear their items to prevent dupes.
+                    this.ply.ClearInventory(); // Clear their items to prevent dupes.
                     this.ply.SetRole(RoleType.Spectator);
                     this.ply.Broadcast(30, $"{plugin.Config.MsgPrefix} {plugin.Config.MsgFspec}");
 
@@ -172,7 +169,7 @@ namespace UltimateAFK
                         {
                             try
                             {
-                                TrySpawn035(PlayerToReplace);
+                                Scp035.API.Spawn035(PlayerToReplace);
                             }
                             catch (Exception e)
                             {
@@ -186,9 +183,9 @@ namespace UltimateAFK
 
                         PlayerToReplace.Health = health;
 
-                        PlayerToReplace.Ammo[(int)AmmoType.Nato556] = ammo1;
-                        PlayerToReplace.Ammo[(int)AmmoType.Nato762] = ammo2;
-                        PlayerToReplace.Ammo[(int)AmmoType.Nato9] = ammo3;
+                        PlayerToReplace.Ammo[ItemType.Ammo556x45] = ammo1;
+                        PlayerToReplace.Ammo[ItemType.Ammo762x39] = ammo2;
+                        PlayerToReplace.Ammo[ItemType.Ammo9x19] = ammo3;
 
                         if (isScp079)
                         {
